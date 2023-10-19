@@ -1,0 +1,23 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap");
+
+@tailwind base;
+@tailwind utilities;
+@tailwind components;
+
+@layer base {
+  :root {
+    --color-bg: 248deg 14% 11%;
+    --color-container: 248deg 11% 15%;
+    --color-green: 127deg 100% 82%;
+    --color-red: 0deg 91% 63%;
+    --color-orange: 13deg 95% 66%;
+    --color-yellow: 42deg 91% 68%;
+    --color-title: 251deg 9% 53%;
+    --color-text: 252deg 11% 91%;
+    --color-placeholder: 249deg 4% 34%;
+  }
+
+  body {
+    @apply font-jetBrains text-paragraph bg-bg;
+  }
+}
