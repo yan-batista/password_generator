@@ -1,3 +1,4 @@
+import Slider from "./styles/Components/Slider";
 import "./styles/index.css";
 
 function App() {
@@ -23,27 +24,51 @@ function App() {
       <div className="w-full bg-container px-2 py-2">
         <div className="flex flex-col gap-4">
           <label>Character Length</label>
-          <input type="range" name="pwd-size" id="pwd-size" min={4} max={20} />
+          <Slider />
         </div>
 
         <div className="mt-4 flex flex-col gap-2">
           <div className="flex flex-row items-center gap-4">
-            <input type="checkbox" id="pwd-uppercase" name="pwd-uppercase" value="uppercase" />
+            <input
+              type="checkbox"
+              id="pwd-uppercase"
+              name="pwd-uppercase"
+              value="uppercase"
+              className="rounded-sm bg-gray-200 border-transparent focus:border-transparent focus:bg-gray-200 text-green focus:ring-0 focus:ring-offset-0"
+            />
             <label htmlFor="pwd-uppercase">Include Uppercase Letters</label>
           </div>
 
           <div className="flex flex-row items-center gap-4">
-            <input type="checkbox" id="pwd-lowercase" name="pwd-lowercase" value="lowercase" />
+            <input
+              type="checkbox"
+              id="pwd-lowercase"
+              name="pwd-lowercase"
+              value="lowercase"
+              className="rounded-sm bg-gray-200 border-transparent focus:border-transparent focus:bg-gray-200 text-green focus:ring-0 focus:ring-offset-0"
+            />
             <label htmlFor="pwd-lowercase">Include Lowercase Letters</label>
           </div>
 
           <div className="flex flex-row items-center gap-4">
-            <input type="checkbox" id="pwd-numbers" name="pwd-numbers" value="numbers" />
+            <input
+              type="checkbox"
+              id="pwd-numbers"
+              name="pwd-numbers"
+              value="numbers"
+              className="rounded-sm bg-gray-200 border-transparent focus:border-transparent focus:bg-gray-200 text-green focus:ring-0 focus:ring-offset-0"
+            />
             <label htmlFor="pwd-numbers">Include Numbers</label>
           </div>
 
           <div className="flex flex-row items-center gap-4">
-            <input type="checkbox" id="pwd-symbols" name="pwd-symbols" value="symbols" />
+            <input
+              type="checkbox"
+              id="pwd-symbols"
+              name="pwd-symbols"
+              value="symbols"
+              className="rounded-sm bg-gray-200 border-transparent focus:border-transparent focus:bg-gray-200 text-green focus:ring-0 focus:ring-offset-0"
+            />
             <label htmlFor="pwd-symbols">Include Symbols</label>
           </div>
         </div>

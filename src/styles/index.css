@@ -20,4 +20,86 @@
   body {
     @apply font-jetBrains text-paragraph bg-bg;
   }
+
+  [type="checkbox"]:checked {
+    background-image: url('data:image/svg+xml,<svg viewBox="0 0 16 16" fill="black" xmlns="http://www.w3.org/2000/svg"><path d="M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z"/></svg>');
+  }
+
+  #pwd-size {
+    width: 100%;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: hsl(248deg 14% 11%);
+  }
+
+  input[type="range"]:focus {
+    outline: none;
+  }
+
+  /* --SLIDER GLOBAL STYLES-- */
+
+  /* --CHROME SLIDER STYLES-- */
+
+  input[type="range"]::-webkit-slider-runnable-track {
+    background: linear-gradient(to right, hsl(127deg 100% 82%), hsl(127deg 100% 82%)), hsl(248deg 14% 11%);
+    background-size: var(--background-size, 0%) 100%;
+    background-repeat: no-repeat;
+    height: 0.5rem;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 1.75rem;
+    height: 1.75rem;
+    background-color: hsl(252deg 11% 91%);
+    border-radius: 50%;
+    margin-top: -0.5rem;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    cursor: pointer;
+    background-color: hsl(248deg 14% 11%);
+    border: 2px solid hsl(127deg 100% 82%);
+  }
+
+  /* --CHROME SLIDER STYLES-- */
+
+  /* --FIREFOX SLIDER STYLES-- */
+
+  input[type="range"]::-moz-range-track {
+    background-color: hsl(248deg 14% 11%);
+    height: 0.5rem;
+  }
+
+  input[type="range"]::-moz-range-progress {
+    background-color: hsl(127deg 100% 82%);
+    height: 0.5rem;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    -moz-appearance: none;
+    width: 1.75rem;
+    height: 1.75rem;
+    background-color: hsl(252deg 11% 91%);
+    border-radius: 50%;
+    border: none;
+    margin-top: -0.5rem;
+  }
+
+  input[type="range"]::-moz-range-thumb:hover {
+    box-sizing: border-box;
+    cursor: pointer;
+    background-color: hsl(248deg 14% 11%);
+    border: 2px solid hsl(127deg 100% 82%);
+  }
+
+  input[type="range"]::-moz-range-thumb:active {
+    box-sizing: border-box;
+    cursor: pointer;
+    background-color: hsl(248deg 14% 11%);
+    border: 2px solid hsl(127deg 100% 82%);
+  }
 }
