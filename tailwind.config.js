@@ -17,6 +17,15 @@ module.exports = {
       fontFamily: {
         jetBrains: ["JetBrains Mono", "monospace"],
       },
+      keyframes: {
+        fadeOut: {
+          "0%": { opacity: "1" },
+          "100%": { opacity: "0" },
+        },
+      },
+      animation: {
+        fadeOut: "fadeOut 2s forwards",
+      },
     },
   },
   plugins: [require("@tailwindcss/forms")],
