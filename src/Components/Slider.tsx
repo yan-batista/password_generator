@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-const Slider = () => {
-  const [length, setLenght] = useState(10);
+interface SliderProps {
+  length: number;
+  changeSliderValue: (value: number) => void;
+}
 
+const Slider: React.FC<SliderProps> = ({ length, changeSliderValue }: SliderProps) => {
   // sets the background size on load
   useEffect(() => {
     const input: HTMLInputElement | null = document.querySelector("#pwd-size");
@@ -13,8 +16,7 @@ const Slider = () => {
 
   // changes value onChange + sets percentage for the new value
   function onChangeCurrentValue(event: React.ChangeEvent<HTMLInputElement>) {
-    setLenght(parseInt(event.currentTarget.value));
-
+    changeSliderValue(parseInt(event.currentTarget.value));
     setPercentage(event.currentTarget);
   }
 
