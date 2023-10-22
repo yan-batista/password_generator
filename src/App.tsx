@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Slider from "./Components/Slider";
 import "./styles/index.css";
 
@@ -17,6 +17,13 @@ enum CheckboxTypes {
   SYMBOLS = "symbols",
 }
 
+enum Strength {
+  TOO_WEAK = "too_weak",
+  WEAK = "weak",
+  MEDIUM = "medium",
+  STRONG = "strong",
+}
+
 function App() {
   const [pwdConfig, setPwdConfig] = useState<PasswordConfigData>({
     length: 8,
@@ -27,6 +34,36 @@ function App() {
   });
   const [checkboxErrorMessageVisible, setCheckboxErrorMessageVisible] = useState(false);
   const [generatedPassword, setGeneratedPassword] = useState("");
+  const [strength, setStrength] = useState<Strength | null>(null);
+
+  useEffect(() => {
+    if (generatedPassword.length < 8) {
+      setStrength(Strength.TOO_WEAK);
+    }
+    if (generatedPassword.length >= 8 && generatedPassword.length < 10) {
+      setStrength(Strength.WEAK);
+    }
+    if (generatedPassword.length >= 10 && generatedPassword.length < 14) {
+      setStrength(Strength.MEDIUM);
+    }
+    if (generatedPassword.length >= 14) {
+      setStrength(Strength.STRONG);
+    }
+  }, [generatedPassword]);
+
+  function getPasswordStrengthStyle(): string {
+    if (strength === Strength.TOO_WEAK) {
+      return "border-red bg-red";
+    } else if (strength === Strength.WEAK) {
+      return "border-orange bg-orange";
+    } else if (strength === Strength.MEDIUM) {
+      return "border-yellow bg-yellow";
+    } else if (strength === Strength.STRONG) {
+      return "border-green bg-green";
+    } else {
+      return "";
+    }
+  }
 
   function changeCheckboxInputValue(name: CheckboxTypes) {
     if (name === CheckboxTypes.UPPERCASE) {
@@ -45,25 +82,6 @@ function App() {
   }
 
   function generatePassword() {
-    // checks which option is selected, and the amount selected
-    const getCheckedConfigState = (): [CheckboxTypes[], number] => {
-      let checked = [];
-      if (pwdConfig.uppercase) {
-        checked.push(CheckboxTypes.UPPERCASE);
-      }
-      if (pwdConfig.lowercase) {
-        checked.push(CheckboxTypes.LOWERCASE);
-      }
-      if (pwdConfig.numbers) {
-        checked.push(CheckboxTypes.NUMBERS);
-      }
-      if (pwdConfig.symbols) {
-        checked.push(CheckboxTypes.SYMBOLS);
-      }
-
-      return [checked, checked.length];
-    };
-
     // generate a random integer from min to max
     const randomIntFromInterval = (max: number, min: number) => {
       return Math.floor(Math.random() * (max - min + 1) + min);
@@ -121,6 +139,25 @@ function App() {
     }
 
     setGeneratedPassword(shufflePassword(password));
+  }
+
+  // checks which option is selected, and the amount selected
+  function getCheckedConfigState(): [CheckboxTypes[], number] {
+    let checked = [];
+    if (pwdConfig.uppercase) {
+      checked.push(CheckboxTypes.UPPERCASE);
+    }
+    if (pwdConfig.lowercase) {
+      checked.push(CheckboxTypes.LOWERCASE);
+    }
+    if (pwdConfig.numbers) {
+      checked.push(CheckboxTypes.NUMBERS);
+    }
+    if (pwdConfig.symbols) {
+      checked.push(CheckboxTypes.SYMBOLS);
+    }
+
+    return [checked, checked.length];
   }
 
   // display the checkbox error message in case no checkbox is checked
@@ -231,11 +268,19 @@ function App() {
         <div className="bg-bg px-2 py-4 mt-4 flex flex-row items-center justify-between">
           <p className="uppercase text-title font-bold">Strength</p>
           <div className="flex flex-row items-center gap-2">
-            <p className="uppercase">Too Weak!</p>
-            <div className="border w-[10px] h-[28px]"></div>
-            <div className="border w-[10px] h-[28px]"></div>
-            <div className="border w-[10px] h-[28px]"></div>
-            <div className="border w-[10px] h-[28px]"></div>
+            {strength && <p className="uppercase">{strength.replace("_", " ")}!</p>}
+            <div className={`border w-[10px] h-[28px] ${getPasswordStrengthStyle()}`}></div>
+            <div
+              className={`border w-[10px] h-[28px] ${strength !== Strength.TOO_WEAK ? getPasswordStrengthStyle() : ""}`}
+            ></div>
+            <div
+              className={`border w-[10px] h-[28px] ${
+                strength === Strength.MEDIUM || strength === Strength.STRONG ? getPasswordStrengthStyle() : ""
+              }`}
+            ></div>
+            <div
+              className={`border w-[10px] h-[28px] ${strength === Strength.STRONG ? getPasswordStrengthStyle() : ""}`}
+            ></div>
           </div>
         </div>
 
