@@ -37,7 +37,7 @@ function App() {
   const [strength, setStrength] = useState<Strength | null>(null);
 
   useEffect(() => {
-    if (generatedPassword.length < 8) {
+    if (generatedPassword.length > 0 && generatedPassword.length < 8) {
       setStrength(Strength.TOO_WEAK);
     }
     if (generatedPassword.length >= 8 && generatedPassword.length < 10) {
