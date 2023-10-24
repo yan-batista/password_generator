@@ -27,8 +27,8 @@ Users should be able to:
 ### Screenshot
 
 <p align="center" >
-  <img src="./public/mobile.png">
   <img src="./public/tablet-desktop.png">
+  <img src="./public/mobile.png">
 </p>
 
 ### Links
