@@ -10,7 +10,6 @@ This is a solution to the Password Generator App. Frontend Mentor challenges hel
   - [Links](#links)
 - [My process](#my-process)
   - [Built with](#built-with)
-  - [What I learned](#what-i-learned)
 - [Author](#author)
 
 ## Overview
@@ -28,12 +27,13 @@ Users should be able to:
 ### Screenshot
 
 <p align="center" >
-
+  <img src="./public/mobile.png">
+  <img src="./public/tablet-desktop.png">
 </p>
 
 ### Links
 
-- [Live Site]()
+- [Live Site](https://password-generator-nine-pink.vercel.app/)
 
 ## My process
 
@@ -42,8 +42,6 @@ Users should be able to:
 - [React](https://reactjs.org/) - JS library
 - [Tailwindcss](https://tailwindcss.com/) - For styles
 - Typescript
-
-### What I learned
 
 ## Author
 

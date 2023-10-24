@@ -2,6 +2,21 @@ import { useEffect, useState } from "react";
 import Slider from "./Components/Slider";
 import "./styles/index.css";
 
+import { zxcvbn, zxcvbnOptions } from "@zxcvbn-ts/core";
+import * as zxcvbnCommonPackage from "@zxcvbn-ts/language-common";
+import * as zxcvbnEnPackage from "@zxcvbn-ts/language-en";
+
+const options = {
+  translations: zxcvbnEnPackage.translations,
+  graphs: zxcvbnCommonPackage.adjacencyGraphs,
+  dictionary: {
+    ...zxcvbnCommonPackage.dictionary,
+    ...zxcvbnEnPackage.dictionary,
+  },
+};
+
+zxcvbnOptions.setOptions(options);
+
 interface PasswordConfigData {
   length: number;
   uppercase: boolean;
@@ -37,17 +52,17 @@ function App() {
   const [strength, setStrength] = useState<Strength | null>(null);
 
   useEffect(() => {
-    if (generatedPassword.length > 0 && generatedPassword.length < 8) {
-      setStrength(Strength.TOO_WEAK);
-    }
-    if (generatedPassword.length >= 8 && generatedPassword.length < 10) {
-      setStrength(Strength.WEAK);
-    }
-    if (generatedPassword.length >= 10 && generatedPassword.length < 14) {
-      setStrength(Strength.MEDIUM);
-    }
-    if (generatedPassword.length >= 14) {
-      setStrength(Strength.STRONG);
+    if (generatedPassword) {
+      const result = zxcvbn(generatedPassword);
+      if (result.score <= 1) {
+        setStrength(Strength.TOO_WEAK);
+      } else if (result.score === 2) {
+        setStrength(Strength.WEAK);
+      } else if (result.score === 3) {
+        setStrength(Strength.MEDIUM);
+      } else if (result.score === 4) {
+        setStrength(Strength.STRONG);
+      }
     }
   }, [generatedPassword]);
 
@@ -184,41 +199,41 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-4 w-full">
-      <p className="text-title font-bold">Password Generator</p>
+    <div className=" flex-col flex items-center gap-4 md:gap-6 md:w-[35rem]">
+      <p className="text-title font-bold md:text-2xl">Password Generator</p>
 
-      <div className="bg-container px-2 py-4 w-full text-lg font-bold flex flex-row items-center justify-between">
+      <div className="bg-container px-2 py-4 w-full text-lg font-bold flex flex-row items-center justify-between relative">
         <input
           type="text"
           name="generated_password"
           readOnly
           placeholder="P4$5W0rD!"
           id="generated_password"
-          className="bg-transparent outline-none placeholder:text-placeholder max-w-[90%] border-0"
+          className="bg-transparent placeholder:text-placeholder placeholder:text-2xl md:text-2xl max-w-[90%] border-0 focus:ring-0"
           defaultValue={generatedPassword}
         />
-        <p className="uppercase text-green absolute right-14 hidden" id="copied_to_clipboard_text">
+        <p className="uppercase text-green absolute right-10 hidden select-none" id="copied_to_clipboard_text">
           Copied!
         </p>
-        <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 fill-green" onClick={copyToClipboard}>
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 fill-green cursor-pointer" onClick={copyToClipboard}>
           <path d="M20.341 3.091 17.909.659A2.25 2.25 0 0 0 16.319 0H8.25A2.25 2.25 0 0 0 6 2.25V4.5H2.25A2.25 2.25 0 0 0 0 6.75v15A2.25 2.25 0 0 0 2.25 24h10.5A2.25 2.25 0 0 0 15 21.75V19.5h3.75A2.25 2.25 0 0 0 21 17.25V4.682a2.25 2.25 0 0 0-.659-1.591ZM12.469 21.75H2.53a.281.281 0 0 1-.281-.281V7.03a.281.281 0 0 1 .281-.281H6v10.5a2.25 2.25 0 0 0 2.25 2.25h4.5v1.969a.282.282 0 0 1-.281.281Zm6-4.5H8.53a.281.281 0 0 1-.281-.281V2.53a.281.281 0 0 1 .281-.281H13.5v4.125c0 .621.504 1.125 1.125 1.125h4.125v9.469a.282.282 0 0 1-.281.281Zm.281-12h-3v-3h.451c.075 0 .147.03.2.082L18.667 4.6a.283.283 0 0 1 .082.199v.451Z" />
         </svg>
       </div>
 
-      <div className="w-full bg-container px-2 py-2">
+      <div className="w-full bg-container p-4 md:p-6">
         <div className="flex flex-col gap-4">
-          <label>Character Length</label>
+          <label className="font-bold md:text-xl">Character Length</label>
           <Slider length={pwdConfig.length} changeSliderValue={changeSliderValue} />
         </div>
 
-        <div className="mt-4 flex flex-col gap-2">
+        <div className="mt-4 flex flex-col gap-4 font-bold text-sm xs:text-base md:text-lg">
           <div className="flex flex-row items-center gap-4">
             <input
               type="checkbox"
               id="pwd-uppercase"
               name="pwd-uppercase"
               value="uppercase"
-              className="rounded-sm cursor-pointer bg-gray-200 border-transparent focus:border-transparent focus:bg-gray-200 text-green focus:ring-0 focus:ring-offset-0"
+              className="w-5 h-5 cursor-pointer bg-transparent border-2 border-paragraph focus:border-transparent focus:bg-gray-200 text-green focus:ring-0 focus:ring-offset-0"
               onChange={() => changeCheckboxInputValue(CheckboxTypes.UPPERCASE)}
             />
             <label htmlFor="pwd-uppercase">Include Uppercase Letters</label>
@@ -230,7 +245,7 @@ function App() {
               id="pwd-lowercase"
               name="pwd-lowercase"
               value="lowercase"
-              className="rounded-sm cursor-pointer bg-gray-200 border-transparent focus:border-transparent focus:bg-gray-200 text-green focus:ring-0 focus:ring-offset-0"
+              className="w-5 h-5 cursor-pointer bg-transparent border-2 border-paragraph focus:border-transparent focus:bg-gray-200 text-green focus:ring-0 focus:ring-offset-0"
               onChange={() => changeCheckboxInputValue(CheckboxTypes.LOWERCASE)}
             />
             <label htmlFor="pwd-lowercase">Include Lowercase Letters</label>
@@ -242,7 +257,7 @@ function App() {
               id="pwd-numbers"
               name="pwd-numbers"
               value="numbers"
-              className="rounded-sm cursor-pointer bg-gray-200 border-transparent focus:border-transparent focus:bg-gray-200 text-green focus:ring-0 focus:ring-offset-0"
+              className="w-5 h-5 cursor-pointer bg-transparent border-2 border-paragraph focus:border-transparent focus:bg-gray-200 text-green focus:ring-0 focus:ring-offset-0"
               onChange={() => changeCheckboxInputValue(CheckboxTypes.NUMBERS)}
             />
             <label htmlFor="pwd-numbers">Include Numbers</label>
@@ -254,38 +269,42 @@ function App() {
               id="pwd-symbols"
               name="pwd-symbols"
               value="symbols"
-              className="rounded-sm cursor-pointer bg-gray-200 border-transparent focus:border-transparent focus:bg-gray-200 text-green focus:ring-0 focus:ring-offset-0"
+              className="w-5 h-5 cursor-pointer bg-transparent border-2 border-paragraph focus:border-transparent focus:bg-gray-200 text-green focus:ring-0 focus:ring-offset-0"
               onChange={() => changeCheckboxInputValue(CheckboxTypes.SYMBOLS)}
             />
             <label htmlFor="pwd-symbols">Include Symbols</label>
           </div>
 
           {checkboxErrorMessageVisible && (
-            <p className="text-red w-full flex flex-row justify-center text-sm">Please select a checkbox above</p>
+            <p className="text-red w-full flex flex-row justify-center text-sm md:text-base">
+              Please select a checkbox above
+            </p>
           )}
         </div>
 
-        <div className="bg-bg px-2 py-4 mt-4 flex flex-row items-center justify-between">
+        <div className="bg-bg px-2 py-4 md:px-8 md:p-6 mt-4 md:mt-6 flex flex-row items-center justify-between">
           <p className="uppercase text-title font-bold">Strength</p>
           <div className="flex flex-row items-center gap-2">
-            {strength && <p className="uppercase">{strength.replace("_", " ")}!</p>}
-            <div className={`border w-[10px] h-[28px] ${getPasswordStrengthStyle()}`}></div>
+            {strength && <p className="uppercase md:text-lg font-bold md:pr-2">{strength.replace("_", " ")}!</p>}
+            <div className={`border-2 w-[10px] h-[28px] ${getPasswordStrengthStyle()}`}></div>
             <div
-              className={`border w-[10px] h-[28px] ${strength !== Strength.TOO_WEAK ? getPasswordStrengthStyle() : ""}`}
+              className={`border-2 w-[10px] h-[28px] ${
+                strength !== Strength.TOO_WEAK ? getPasswordStrengthStyle() : ""
+              }`}
             ></div>
             <div
-              className={`border w-[10px] h-[28px] ${
+              className={`border-2 w-[10px] h-[28px] ${
                 strength === Strength.MEDIUM || strength === Strength.STRONG ? getPasswordStrengthStyle() : ""
               }`}
             ></div>
             <div
-              className={`border w-[10px] h-[28px] ${strength === Strength.STRONG ? getPasswordStrengthStyle() : ""}`}
+              className={`border-2 w-[10px] h-[28px] ${strength === Strength.STRONG ? getPasswordStrengthStyle() : ""}`}
             ></div>
           </div>
         </div>
 
         <button
-          className="uppercase bg-green border border-green text-bg w-full mt-4 mb-2 py-4 font-bold flex flex-row justify-center items-center gap-2 hover:bg-transparent hover:text-green"
+          className="uppercase bg-green border border-green text-bg w-full mt-4 md:mt-6 mb-2 py-4 font-bold flex flex-row justify-center items-center gap-2 hover:bg-transparent hover:text-green md:text-lg"
           onClick={() => {
             displayCheckboxErrorMessage();
             generatePassword();

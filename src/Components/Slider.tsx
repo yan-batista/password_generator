@@ -38,7 +38,7 @@ const Slider: React.FC<SliderProps> = ({ length, changeSliderValue }: SliderProp
 
   return (
     <div className="relative">
-      <p className="absolute right-0 -top-8 text-2xl text-green font-bold">{length}</p>
+      <p className="absolute right-0 -top-8 md:-top-10 text-2xl md:text-3xl text-green font-bold">{length}</p>
       <input
         type="range"
         name="pwd-size"

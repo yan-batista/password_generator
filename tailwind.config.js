@@ -26,6 +26,9 @@ module.exports = {
       animation: {
         fadeOut: "fadeOut 2s forwards",
       },
+      screens: {
+        xs: "375px",
+      },
     },
   },
   plugins: [require("@tailwindcss/forms")],
